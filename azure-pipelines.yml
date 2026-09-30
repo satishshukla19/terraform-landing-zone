@@ -31,6 +31,32 @@ steps:
       version: 'v1.26.0'
       dir: '.'
       args: '--format json --out $(Build.ArtifactStagingDirectory)/tfsec-report.json --soft-fail'
+    
+
+  - task: CmdLine@2
+    displayName: "Verify tfsec Report"
+    inputs:
+      script: |
+        echo "===== Build.ArtifactStagingDirectory ====="
+              echo "$(Build.ArtifactStagingDirectory)"
+        
+              echo "===== Directory contents ====="
+              ls -la "$(Build.ArtifactStagingDirectory)" || true
+        
+              echo "===== Searching for tfsec report ====="
+              find "$(Build.SourcesDirectory)" "$(Build.ArtifactStagingDirectory)" -type f -name "*tfsec*" -print 2>/dev/null || true
+
+
+  # - bash: |
+  #     echo "===== Build.ArtifactStagingDirectory ====="
+  #     echo "$(Build.ArtifactStagingDirectory)"
+
+  #     echo "===== Directory contents ====="
+  #     ls -la "$(Build.ArtifactStagingDirectory)" || true
+
+  #     echo "===== Searching for tfsec report ====="
+  #     find "$(Build.SourcesDirectory)" "$(Build.ArtifactStagingDirectory)" -type f -name "*tfsec*" -print 2>/dev/null || true
+  #   displayName: "Verify tfsec Report"
 
   - task: PublishPipelineArtifact@1
     displayName: "Publish tfsec Report"
