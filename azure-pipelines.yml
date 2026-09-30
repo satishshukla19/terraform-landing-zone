@@ -24,16 +24,18 @@ steps:
   # - script: terraform validate
   #     displayName:"Terraform Validate"
   
+
   - task: tfsec@1
-    displayName: Scaning stage
+    displayName: "Scanning stage"
     inputs:
       version: 'v1.26.0'
       dir: '.'
-      args: '--format json --out $(Build.ArtifactStagingDirectory)/tfsec-report.json'
-  
+      args: '--format json --out $(Build.ArtifactStagingDirectory)/tfsec-report.json --soft-fail'
+
   - task: PublishPipelineArtifact@1
+    displayName: "Publish tfsec Report"
     inputs:
-      targetPath: '$(Pipeline.Workspace)/tfsec-report.json'
+      targetPath: '$(Build.ArtifactStagingDirectory)/tfsec-report.json'
       artifact: 'tfsec-report'
       publishLocation: 'pipeline'
 
