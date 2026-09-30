@@ -4,9 +4,9 @@ trigger:
 pool: Default
 
 steps:
-  displayName: Scaning stage
-  
+
   - task: tfsec@1
+    displayName: Scaning stage
     inputs:
       version: 'v1.26.0'
 
