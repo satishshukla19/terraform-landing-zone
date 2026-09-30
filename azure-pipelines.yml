@@ -4,11 +4,21 @@ trigger:
 pool: Default
 
 steps:
+  
+  - task: CmdLine@2
+    displayName: "Terraform Format"
+    inputs:
+      script: 'terraform fmt -check -recursive'
+  - task: CmdLine@2
+    displayName: "Terraform Validate"
+    inputs:
+      script: 'terraform validate'
 
-  - script: terraform fmt -check -recursive
-        displayName:"Terraform Format"
-  - script: terraform validate
-      displayName:"Terraform Validate"
+
+  # - script: terraform fmt -check -recursive
+  #       displayName:"Terraform Format"
+  # - script: terraform validate
+  #     displayName:"Terraform Validate"
   - task: TerraformInstaller@1
     inputs:
       terraformVersion: 'latest'
