@@ -41,4 +41,12 @@ steps:
     displayName: Scaning stage
     inputs:
       version: 'v1.26.0'
+      dir: '.'
+      args: '--format json --out $(Build.ArtifactStagingDirectory)/tfsec-report.json'
+  
+  - task: PublishPipelineArtifact@1
+    inputs:
+      targetPath: '$(Pipeline.Workspace)/tfsec-report.json'
+      artifact: 'tfsec-report'
+      publishLocation: 'pipeline'
 
