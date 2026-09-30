@@ -46,17 +46,20 @@ steps:
               echo "===== Searching for tfsec report ====="
               find "$(Build.SourcesDirectory)" "$(Build.ArtifactStagingDirectory)" -type f -name "*tfsec*" -print 2>/dev/null || true
 
+  - task: Bash@3
+    displayName: "Run tfsec"
+    inputs:
+      targetType: 'inline'
+      script: |
+        mkdir -p "$(Build.ArtifactStagingDirectory)"
 
-  # - bash: |
-  #     echo "===== Build.ArtifactStagingDirectory ====="
-  #     echo "$(Build.ArtifactStagingDirectory)"
+        tfsec "$(Build.SourcesDirectory)" \
+          --format json \
+          --out "$(Build.ArtifactStagingDirectory)/tfsec-report.json" \
+          --soft-fail
 
-  #     echo "===== Directory contents ====="
-  #     ls -la "$(Build.ArtifactStagingDirectory)" || true
-
-  #     echo "===== Searching for tfsec report ====="
-  #     find "$(Build.SourcesDirectory)" "$(Build.ArtifactStagingDirectory)" -type f -name "*tfsec*" -print 2>/dev/null || true
-  #   displayName: "Verify tfsec Report"
+        echo "===== tfsec report ====="
+        ls -lh "$(Build.ArtifactStagingDirectory)/tfsec-report.json"
 
   - task: PublishPipelineArtifact@1
     displayName: "Publish tfsec Report"
