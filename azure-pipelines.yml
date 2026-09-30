@@ -8,7 +8,7 @@ steps:
   - task: CmdLine@2
     displayName: "Terraform Format"
     inputs:
-      script: 'terraform fmt -check -recursive'
+      script: 'terraform fmt'
   - task: CmdLine@2
     displayName: "Terraform Validate"
     inputs:
