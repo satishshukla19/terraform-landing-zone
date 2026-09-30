@@ -5,6 +5,11 @@ pool: Default
 
 steps:
 
+  - script: terraform fmt -check -recursive
+        displayName:"Terraform Format"
+  - script: terraform validate
+      displayName:"Terraform Validate"
+
   - task: tfsec@1
     displayName: Scaning stage
     inputs:
