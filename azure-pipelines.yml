@@ -46,7 +46,6 @@ steps:
               echo "===== Searching for tfsec report ====="
               find "$(Build.SourcesDirectory)" "$(Build.ArtifactStagingDirectory)" -type f -name "*tfsec*" -print 2>/dev/null || true
 
-
   - task: PublishPipelineArtifact@1
     displayName: "Publish tfsec Report"
     inputs:
