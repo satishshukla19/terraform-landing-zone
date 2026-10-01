@@ -4,17 +4,18 @@ trigger:
 pool: Default
 
 steps:
+
   - task: TerraformInstaller@1
     inputs:
       terraformVersion: 'latest'
 
   - task: CmdLine@2
-    displayName: "Terraform Format"
+    displayName: Terraform Format
     inputs:
       script: 'terraform fmt'
   
   - task: TerraformTask@5
-    displayName: "terraform init"
+    displayName: terraform init
     inputs:
       provider: 'azurerm'
       command: 'init'
@@ -25,16 +26,25 @@ steps:
       backendAzureRmKey: 'infrastate001'
 
   - task: CmdLine@2
-    displayName: "Terraform Validate"
+    displayName: Terraform Validate
     inputs:
       script: 'terraform validate'
 
   - task: TerraformTask@5
-    displayName: "terraform plan"
+    displayName: terraform plan
     inputs:
       provider: 'azurerm'
       command: 'plan'
       environmentServiceNameAzureRM: 'sep-serviceconection'
+
+  - task: TerraformTask@5
+    displayName: terraform apply
+    inputs:
+      provider: 'azurerm'
+      command: 'apply'
+      commandOptions: 'apply -auto-approve'
+      environmentServiceNameAzureRM: 'sep-serviceconection'
+
 
   # - script: terraform fmt -check -recursive
   #       displayName:"Terraform Format"
