@@ -17,3 +17,14 @@ resource "azurerm_subnet" "subnet" {
   address_prefixes     = ["10.0.0.0/26"]
 
 }
+resource "azurerm_network_interface" "nic" {
+  name                = "axion-ui-nic"
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
+
+  ip_configuration {
+    name                          = "testconfigurationip"
+    subnet_id                     = azurerm_subnet.subnet.id
+    private_ip_address_allocation = "Dynamic"
+  }
+}
