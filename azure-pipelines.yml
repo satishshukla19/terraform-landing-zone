@@ -29,6 +29,12 @@ steps:
     inputs:
       script: 'terraform validate'
 
+  - task: TerraformTask@5
+    displayName: "terraform plan"
+    inputs:
+      provider: 'azurerm'
+      command: 'plan'
+      environmentServiceNameAzureRM: 'sep-serviceconection'
 
   # - script: terraform fmt -check -recursive
   #       displayName:"Terraform Format"
