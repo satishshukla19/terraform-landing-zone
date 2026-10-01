@@ -44,6 +44,12 @@ steps:
       command: 'apply'
       environmentServiceNameAzureRM: 'sep-serviceconection'
 
+  - task: TerraformTask@5
+    inputs:
+      provider: 'azurerm'
+      command: 'destroy'
+      environmentServiceNameAzureRM: 'sep-serviceconection'
+
 
   # - script: terraform fmt -check -recursive
   #       displayName:"Terraform Format"
