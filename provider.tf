@@ -5,6 +5,12 @@ terraform {
       version = "~> 4.0"
     }
   }
+  backend "azurerm" {
+    resource_group_name  = "Ali-test"
+    storage_account_name = "nahid0562"
+    container_name       = "adostatefiles"
+    key                  = "landing-zone.infra.tfstate"
+  }
 
   required_version = ">= 1.5.0"
 }
