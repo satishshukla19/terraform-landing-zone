@@ -30,7 +30,7 @@ jobs:
           backendAzureRmResourceGroupName: 'Ali-test'
           backendAzureRmStorageAccountName: 'nahid0562'
           backendAzureRmContainerName: 'adostatefiles'
-          backendAzureRmKey: 'infra.tfstate'
+          backendAzureRmKey: 'landing-zone.infra.tfstate'
 
       - task: CmdLine@2
         displayName: Terraform Validate
