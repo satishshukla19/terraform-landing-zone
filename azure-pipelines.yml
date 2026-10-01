@@ -41,12 +41,28 @@ jobs:
   - job:
     displayName: "Terraform Plan Apply" 
     steps:
+
+      - task: TerraformInstaller@1
+        inputs:
+          terraformVersion: 'latest'
+
+      - task: TerraformTask@5
+        displayName: terraform init
+        inputs:
+          provider: 'azurerm'
+          command: 'init'
+          backendServiceArm: 'sep-serviceconection'
+          backendAzureRmResourceGroupName: 'Ali-test'
+          backendAzureRmStorageAccountName: 'nahid0562'
+          backendAzureRmContainerName: 'adostatefiles'
+          backendAzureRmKey: 'infra.tfstate'
+
       - task: TerraformTask@5
         displayName: terraform plan
         inputs:
           provider: 'azurerm'
           command: 'plan'
-          workingDirectory: '$(System.DefaultWorkingDirectory).'
+          workingDirectory: '$(System.DefaultWorkingDirectory)'
           environmentServiceNameAzureRM: 'sep-serviceconection'
 
       - task: TerraformTask@5
