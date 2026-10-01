@@ -46,6 +46,7 @@ jobs:
         inputs:
           provider: 'azurerm'
           command: 'plan'
+          workingDirectory: '$(System.DefaultWorkingDirectory).'
           environmentServiceNameAzureRM: 'sep-serviceconection'
 
       - task: TerraformTask@5
