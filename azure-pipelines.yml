@@ -45,6 +45,7 @@ steps:
       environmentServiceNameAzureRM: 'sep-serviceconection'
 
   - task: TerraformTask@5
+    displayName: terraform destroy
     inputs:
       provider: 'azurerm'
       command: 'destroy'
