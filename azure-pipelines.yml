@@ -12,11 +12,22 @@ steps:
     displayName: "Terraform Format"
     inputs:
       script: 'terraform fmt'
+  
+  - task: TerraformTask@5
+    displayName: "terraform init"
+    inputs:
+      provider: 'azurerm'
+      command: 'init'
+      backendServiceArm: 'sep-serviceconection'
+      backendAzureRmResourceGroupName: 'Ali-test'
+      backendAzureRmStorageAccountName: 'nahid0562'
+      backendAzureRmContainerName: 'adostatefiles'
+      backendAzureRmKey: 'infrastate001'
 
-  # - task: CmdLine@2
-  #   displayName: "Terraform Validate"
-  #   inputs:
-  #     script: 'terraform validate'
+  - task: CmdLine@2
+    displayName: "Terraform Validate"
+    inputs:
+      script: 'terraform validate'
 
 
   # - script: terraform fmt -check -recursive
@@ -25,31 +36,31 @@ steps:
   #     displayName:"Terraform Validate"
   
 
-  - task: tfsec@1
-    displayName: "Scanning stage"
-    inputs:
-      version: 'v1.26.0'
-      dir: '.'
-      args: '--format json --out $(Build.ArtifactStagingDirectory)/tfsec-report.json --soft-fail'
+  # - task: tfsec@1
+  #   displayName: "Scanning stage"
+  #   inputs:
+  #     version: 'v1.26.0'
+  #     dir: '.'
+  #     args: '--format json --out $(Build.ArtifactStagingDirectory)/tfsec-report.json --soft-fail'
     
 
-  - task: CmdLine@2
-    displayName: "Verify tfsec Report"
-    inputs:
-      script: |
-        echo "===== Build.ArtifactStagingDirectory ====="
-              echo "$(Build.ArtifactStagingDirectory)"
+  # - task: CmdLine@2
+  #   displayName: "Verify tfsec Report"
+  #   inputs:
+  #     script: |
+  #       echo "===== Build.ArtifactStagingDirectory ====="
+  #             echo "$(Build.ArtifactStagingDirectory)"
         
-              echo "===== Directory contents ====="
-              ls -la "$(Build.ArtifactStagingDirectory)" || true
+  #             echo "===== Directory contents ====="
+  #             ls -la "$(Build.ArtifactStagingDirectory)" || true
         
-              echo "===== Searching for tfsec report ====="
-              find "$(Build.SourcesDirectory)" "$(Build.ArtifactStagingDirectory)" -type f -name "*tfsec*" -print 2>/dev/null || true
+  #             echo "===== Searching for tfsec report ====="
+  #             find "$(Build.SourcesDirectory)" "$(Build.ArtifactStagingDirectory)" -type f -name "*tfsec*" -print 2>/dev/null || true
 
-  - task: PublishPipelineArtifact@1
-    displayName: "Publish tfsec Report"
-    inputs:
-      targetPath: '$(Build.ArtifactStagingDirectory)/tfsec-report.json'
-      artifact: 'tfsec-report'
-      publishLocation: 'pipeline'
+  # - task: PublishPipelineArtifact@1
+  #   displayName: "Publish tfsec Report"
+  #   inputs:
+  #     targetPath: '$(Build.ArtifactStagingDirectory)/tfsec-report.json'
+  #     artifact: 'tfsec-report'
+  #     publishLocation: 'pipeline'
 
