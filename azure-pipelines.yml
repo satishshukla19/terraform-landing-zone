@@ -1,88 +1,116 @@
 trigger:
-- main
+ branches:
+   include:
+     - main
+     - feature*
+
 
 pool: Default
 
-steps:
+ 
+jobs:
+  - job:
+    displayName: "Terraform Init Validate" 
+    steps:
+      - task: TerraformInstaller@1
+        inputs:
+          terraformVersion: 'latest'
 
-  - task: TerraformInstaller@1
-    inputs:
-      terraformVersion: 'latest'
+      - task: CmdLine@2
+        displayName: Terraform Format
+        inputs:
+          script: 'terraform fmt'
+      
+      - task: TerraformTask@5
+        displayName: terraform init
+        inputs:
+          provider: 'azurerm'
+          command: 'init'
+          backendServiceArm: 'sep-serviceconection'
+          backendAzureRmResourceGroupName: 'Ali-test'
+          backendAzureRmStorageAccountName: 'nahid0562'
+          backendAzureRmContainerName: 'adostatefiles'
+          backendAzureRmKey: 'infra.tfstate'
 
-  - task: CmdLine@2
-    displayName: Terraform Format
-    inputs:
-      script: 'terraform fmt'
-  
-  - task: TerraformTask@5
-    displayName: terraform init
-    inputs:
-      provider: 'azurerm'
-      command: 'init'
-      backendServiceArm: 'sep-serviceconection'
-      backendAzureRmResourceGroupName: 'Ali-test'
-      backendAzureRmStorageAccountName: 'nahid0562'
-      backendAzureRmContainerName: 'adostatefiles'
-      backendAzureRmKey: 'infra.tfstate'
-
-  - task: CmdLine@2
-    displayName: Terraform Validate
-    inputs:
-      script: 'terraform validate'
-
-  - task: TerraformTask@5
-    displayName: terraform plan
-    inputs:
-      provider: 'azurerm'
-      command: 'plan'
-      environmentServiceNameAzureRM: 'sep-serviceconection'
-
-  - task: TerraformTask@5
-    displayName: terraform apply
-    inputs:
-      provider: 'azurerm'
-      command: 'apply'
-      environmentServiceNameAzureRM: 'sep-serviceconection'
-
-  - task: TerraformTask@5
-    displayName: terraform destroy
-    inputs:
-      provider: 'azurerm'
-      command: 'destroy'
-      environmentServiceNameAzureRM: 'sep-serviceconection'
-
-
-  # - script: terraform fmt -check -recursive
-  #       displayName:"Terraform Format"
-  # - script: terraform validate
-  #     displayName:"Terraform Validate"
+      - task: CmdLine@2
+        displayName: Terraform Validate
+        inputs:
+          script: 'terraform validate'
   
 
-  # - task: tfsec@1
-  #   displayName: "Scanning stage"
-  #   inputs:
-  #     version: 'v1.26.0'
-  #     dir: '.'
-  #     args: '--format json --out $(Build.ArtifactStagingDirectory)/tfsec-report.json --soft-fail'
-    
+  - job:
+    displayName: "Terraform Plan Apply" 
+    steps:
 
-  # - task: CmdLine@2
-  #   displayName: "Verify tfsec Report"
-  #   inputs:
-  #     script: |
-  #       echo "===== Build.ArtifactStagingDirectory ====="
-  #             echo "$(Build.ArtifactStagingDirectory)"
-        
-  #             echo "===== Directory contents ====="
-  #             ls -la "$(Build.ArtifactStagingDirectory)" || true
-        
-  #             echo "===== Searching for tfsec report ====="
-  #             find "$(Build.SourcesDirectory)" "$(Build.ArtifactStagingDirectory)" -type f -name "*tfsec*" -print 2>/dev/null || true
+      - task: TerraformInstaller@1
+        inputs:
+          terraformVersion: 'latest'
 
-  # - task: PublishPipelineArtifact@1
-  #   displayName: "Publish tfsec Report"
-  #   inputs:
-  #     targetPath: '$(Build.ArtifactStagingDirectory)/tfsec-report.json'
-  #     artifact: 'tfsec-report'
-  #     publishLocation: 'pipeline'
+      - task: TerraformTask@5
+        displayName: terraform init
+        inputs:
+          provider: 'azurerm'
+          command: 'init'
+          backendServiceArm: 'sep-serviceconection'
+          backendAzureRmResourceGroupName: 'Ali-test'
+          backendAzureRmStorageAccountName: 'nahid0562'
+          backendAzureRmContainerName: 'adostatefiles'
+          backendAzureRmKey: 'infra.tfstate'
+
+      - task: TerraformTask@5
+        displayName: terraform plan
+        inputs:
+          provider: 'azurerm'
+          command: 'plan'
+          workingDirectory: '$(System.DefaultWorkingDirectory)'
+          environmentServiceNameAzureRM: 'sep-serviceconection'
+
+      - task: TerraformTask@5
+        displayName: terraform apply
+        inputs:
+          provider: 'azurerm'
+          command: 'apply'
+          environmentServiceNameAzureRM: 'sep-serviceconection'
+
+      - task: TerraformTask@5
+        displayName: terraform destroy
+        inputs:
+          provider: 'azurerm'
+          command: 'destroy'
+          environmentServiceNameAzureRM: 'sep-serviceconection'
+
+
+      # - script: terraform fmt -check -recursive
+      #       displayName:"Terraform Format"
+      # - script: terraform validate
+      #     displayName:"Terraform Validate"
+      
+
+      # - task: tfsec@1
+      #   displayName: "Scanning stage"
+      #   inputs:
+      #     version: 'v1.26.0'
+      #     dir: '.'
+      #     args: '--format json --out $(Build.ArtifactStagingDirectory)/tfsec-report.json --soft-fail'
+        
+
+      # - task: CmdLine@2
+      #   displayName: "Verify tfsec Report"
+      #   inputs:
+      #     script: |
+      #       echo "===== Build.ArtifactStagingDirectory ====="
+      #             echo "$(Build.ArtifactStagingDirectory)"
+            
+      #             echo "===== Directory contents ====="
+      #             ls -la "$(Build.ArtifactStagingDirectory)" || true
+            
+      #             echo "===== Searching for tfsec report ====="
+      #             find "$(Build.SourcesDirectory)" "$(Build.ArtifactStagingDirectory)" -type f -name "*tfsec*" -print 2>/dev/null || true
+
+      # - task: PublishPipelineArtifact@1
+      #   displayName: "Publish tfsec Report"
+      #   inputs:
+      #     targetPath: '$(Build.ArtifactStagingDirectory)/tfsec-report.json'
+      #     artifact: 'tfsec-report'
+      #     publishLocation: 'pipeline'
 
