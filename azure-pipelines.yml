@@ -23,7 +23,7 @@ steps:
       backendAzureRmResourceGroupName: 'Ali-test'
       backendAzureRmStorageAccountName: 'nahid0562'
       backendAzureRmContainerName: 'adostatefiles'
-      backendAzureRmKey: 'infra.terraform.tfstate'
+      backendAzureRmKey: 'infra.tfstate'
 
   - task: CmdLine@2
     displayName: Terraform Validate
