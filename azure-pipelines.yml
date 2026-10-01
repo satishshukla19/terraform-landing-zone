@@ -42,7 +42,6 @@ steps:
     inputs:
       provider: 'azurerm'
       command: 'apply'
-      commandOptions: 'terraform apply -auto-approve'
       environmentServiceNameAzureRM: 'sep-serviceconection'
 
 
