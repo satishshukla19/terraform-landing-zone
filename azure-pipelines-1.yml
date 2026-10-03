@@ -10,6 +10,7 @@ steps:
       terraformVersion: 'latest'
 
   - task: TerraformTask@5
+    displayName: terraform fmt
     inputs:
       provider: 'azurerm'
       command: 'custom'
@@ -18,6 +19,7 @@ steps:
       environmentServiceNameAzureRM: 'sep-serviceconection'
   
   - task: TerraformTask@5
+    displayName: terraform validate
     inputs:
       provider: 'azurerm'
       command: 'validate'
