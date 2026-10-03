@@ -1,0 +1,20 @@
+trigger: none
+
+pool: Default
+
+
+
+steps:
+  - task: TerraformInstaller@1
+    inputs:
+      terraformVersion: 'latest'
+
+  - task: TerraformTask@5
+    inputs:
+      provider: 'azurerm'
+      command: 'custom'
+      outputTo: 'console'
+      customCommand: 'fmt'
+      environmentServiceNameAzureRM: 'sep-serviceconection'
+
+
